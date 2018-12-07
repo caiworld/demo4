@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demo4.dao.DemoDao">
+
+    <select id="selectById" resultType="com.example.demo4.entity.DemoDomain">
+        SELECT * FROM demo1 WHERE id=#{id}
+    </select>
+
+    <insert id="insert">
+        INSERT INTO demo1(id, name, age) values(#{id},#{name},#{age})
+    </insert>
+
+    <update id="updateById">
+        UPDATE demo1 set name=#{name},age=#{age} where id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE from demo1 WHERE id = #{id}
+    </delete>
+
+    <select id="listDemos" resultType="com.example.demo4.entity.DemoDomain">
+        SELECT * from demo1
+    </select>
+
+    <select id="findByPage" resultType="com.example.demo4.entity.DemoDomain">
+        SELECT * from demo1
+    </select>
+    <!--动态查询，条件不定-->
+    <select id="dynamicWithSelect" resultType="com.example.demo4.entity.DemoDomain">
+        SELECT id,name,age from demo1
+        <where>
+            <if test="name!=null">
+                and name = #{name}
+            </if>
+            <if test="age!=null">
+                and age=#{age}
+            </if>
+        </where>
+    </select>
+
+    <insert id="batchInsert">
+        INSERT INTO demo1(id, name, age) VALUES
+        <foreach collection="list" item="list" separator=",">
+            (#{list.id},#{list.name},#{list.age})
+        </foreach>
+    </insert>
+
+    <select id="selectByIds" resultType="com.example.demo4.entity.DemoDomain">
+        SELECT id,name,age from demo1 WHERE id in
+        <foreach collection="array" item="ids" index="id" separator="," open="(" close=")">
+            ${ids}
+        </foreach>
+    </select>
+</mapper>
